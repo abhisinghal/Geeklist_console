@@ -51,6 +51,9 @@ INTRODUCTION = '''
 * userdetails() - Fetches your name and email address.
 * getCards() - Fetches profile information of another geek.
 * getStatus() - Fetches the list of your statuses.
+* getLinks() - Fetches the list of your shared links.
+* getFollowers() - Fetches the list of your followers
+* exit() - Exit from application.
 **************************************************************************************************************
 '''
 #Ending initializing variables 
@@ -102,11 +105,11 @@ def getCards():
 		total_cards=9 
 		for i in range(0,total_cards):  
 			headline = jsondata['data']['cards'][i]['headline']
-			print "Title : %s." %headline
+			print "%d) Title : %s." %(i,headline)
 	else:
 		for i in range(0,total_cards):  
 			headline = jsondata['data']['cards'][i]['headline']
-			print "Title : %s." %headline
+			print "%d) Title : %s." %(i,headline)
 
 def getStatus():
 	jsondata = getjson('user/micros')
@@ -116,11 +119,11 @@ def getStatus():
 		total_micros=9
 		for i in range(0,total_micros):
 			status = jsondata['data']['micros'][i]['status']
-			print "Status Messages : %s." % status
+			print "%d) Status Messages : %s." % (i,status)
 	else:
 		for i in range(0,total_micros):
 			status = jsondata['data']['micros'][i]['status']
-			print "Status Messages : %s." % status
+			print "%d) Status Messages : %s." % (i,status)
 
 def getLinks():
 	jsondata = getjson('user/links')
@@ -131,12 +134,28 @@ def getLinks():
 		for i in range(0,total_links):
 			title = jsondata['data']['links'][i]['title']
 			url = jsondata['data']['links'][i]['url']
-			print "Title : %s. & URL : %s" % (title,url)
+			print "%d ) Title : %s. & URL : %s" % (i,title,url)
 	else:
 		for i in range(0,total_links):
 			title = jsondata['data']['links'][i]['title']
 			url = jsondata['data']['links'][i]['url']
-			print "Title : %s. & URL : %s" % (title,url)
+			print "%d ) Title : %s. & URL : %s" % (i,title,url)
+
+def getFollowers():
+	jsondata = getjson('user/followers')
+	total_followers = jsondata['data']['total_followers']
+	print "Total number of followers till now : %s."%total_followers
+	if(total_followers>9):
+		total_followers=9
+		for i in range(0,total_followers):
+			follower = jsondata['data']['followers'][i]['name']
+			location = jsondata['data']['followers'][i]['location']
+			print "%d : %s from %s" % (i,follower,location)
+	else:
+		for i in range(0,total_followers):
+			follower = jsondata['data']['followers'][i]['name']
+			location = jsondata['data']['followers'][i]['location']
+			print "%d : %s from %s" % (i,follower,location)
 
 
 def logout():
@@ -144,6 +163,13 @@ def logout():
         os.remove(ACCESS_TOKEN_FILE)
 	print 'Session cleared!'
 
+
+def help():
+    print INTRODUCTION
+
+def exit():
+	import sys
+        sys.exit(0)
 
 ##########################################Non Interactive Functions#########################################
 
@@ -170,20 +196,6 @@ def shell():
     except ImportError:
         import code
         code.InteractiveConsole(globals()).interact(INTRODUCTION)
-
-
-def help():
-    print '''
-**************************************************************************************************************
-*                                           Please use the following commands:
-*
-* help() - Display help message.
-* auth(Geeklist) - Authenticate with Geekli.st. 
-* logout() - Expire the access token in case of any authentication or bad request error.
-* userdetails() - Fetches your name and email address.
-* getStatus() - Fetches the list of your statuses.
-**************************************************************************************************************
-'''
 
 
 if __name__ == '__main__':
