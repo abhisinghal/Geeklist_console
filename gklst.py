@@ -24,7 +24,12 @@ except NameError:
     read_input = input
 
 
+
+
 #Initializing variables - These are the default entries for Geeklist Console App
+CONSUMER_KEY='B_9C1WM-hC-JcVTVOUwyOwXB0PA'
+CONSUMER_SECRET='RLEw2jBmlceHb02GobOnI-wtiyukg-in6lEgQIxMttI'
+ACCESS_TOKEN_FILE = os.path.join(os.path.dirname(__file__), '.gklst_access_token')
 Geeklist = OAuth1Service(
 	    name='Geeklist',
 	    consumer_key=CONSUMER_KEY,
@@ -34,9 +39,6 @@ Geeklist = OAuth1Service(
 	    authorize_url='https://geekli.st/oauth/authorize',
 	    base_url='http://api.geekli.st/v1/')
 
-CONSUMER_KEY='B_9C1WM-hC-JcVTVOUwyOwXB0PA'
-CONSUMER_SECRET='RLEw2jBmlceHb02GobOnI-wtiyukg-in6lEgQIxMttI'
-ACCESS_TOKEN_FILE = '.gklst_access_token'
 
 
 INTRODUCTION = '''
@@ -52,7 +54,9 @@ INTRODUCTION = '''
 '''
 #Ending initializing variables 
 
-#################################################Functions Begin#################################################
+
+
+#################################################All Interactive Functions#################################################
 def auth(Geeklist):
 	auth_required = True
 	if os.path.exists(ACCESS_TOKEN_FILE):
@@ -61,13 +65,12 @@ def auth(Geeklist):
 		global ACCESS_TOKEN_SECRET
         	ACCESS_TOKEN = data['access_token']
 		ACCESS_TOKEN_SECRET = data['access_token_secret']
-		#print ACCESS_TOKEN,ACCESS_TOKEN_SECRET | Printed them just to debug.
 		userdetails()
         	auth_required = False
 		print 'Authentication not required.'
 
 
-	if auth_required:
+	if auth_required: 
 		request_token, request_token_secret = Geeklist.get_request_token() #Step 1 - Got request Token
 		authorize_url = Geeklist.get_authorize_url(request_token) 
 		print 'Authorized'
@@ -109,6 +112,15 @@ def getStatus():
 		status = jsondata['data']['micros'][i]['status']
 		print "Status Messages : %s." % status
 
+
+def logout():
+    if os.path.exists(ACCESS_TOKEN_FILE):
+        os.remove(ACCESS_TOKEN_FILE)
+	print 'Session cleared!'
+
+
+##########################################Non Interactive Functions#########################################
+
 def storetoken(access_token,access_token_secret):
 	global ACCESS_TOKEN_FILE
 	data = {'access_token': access_token,'access_token_secret': access_token_secret}
@@ -116,11 +128,6 @@ def storetoken(access_token,access_token_secret):
 	print 'Access token stored'
 	
 
-
-def logout():
-    if os.path.exists(ACCESS_TOKEN_FILE):
-        os.remove(ACCESS_TOKEN_FILE)
-	print 'Session cleared!'
 
 
 def shell():

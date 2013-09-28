@@ -9,8 +9,7 @@ Email : bhavyanshu.spl@gmail.com
 Website : http://bhavyanshu.github.io |  https://geekli.st/bhavyanshu					
 
 
-LICENSE
--------
+#LICENSE
 
 > Copyright 2013 Bhavyanshu Parasher (http://bhavyanshu.github.io) 
 
@@ -26,13 +25,20 @@ implied. See the License for the specific language governing
 permissions and limitations under the License.
 
 
-CONTRIBUTION
-------------
+#CONTRIBUTION
 
-Anyone can contribute to it. :)
+Anyone can contribute to it. Simply fork the repository and send pull requests.
 
 
-INSTALLATION
+#INSTALLATION
 
-1) pip install rauth
-2) cd into project directory and execute *python gklst.py*
+1) cd into project directory & execute in terminal *python setup.py install*.				
+2) Now execute *python gklst.py* & have fun.			
+
+
+#CHANGE LOG
+
+####Version 0.1 - 28th September 
+* Authenticates user to use "Geeklist Console" Application using geekli.st Oauth 1.0.		
+* Gets user details of authenticated user.			
+* Gets status messages of the authenticated user.		
