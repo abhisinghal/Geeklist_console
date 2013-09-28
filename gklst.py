@@ -10,7 +10,9 @@ Email : bhavyanshu.spl@gmail.com
 
 '''
 from rauth import OAuth1Service
-import simplejson as json
+try: import simplejson as json
+except ImportError: import json
+from json import *
 import webbrowser
 import os
 
@@ -110,9 +112,10 @@ def getStatus():
 	r = session.get('user/micros',verify=True)
 	jsondata = json.loads(r.text)
 	total_micros = jsondata['data']['total_micros']
-	status = jsondatamicros[u'status']
 	print "Total number of micros till now : %s." %total_micros
-	print "Status Messages : %s." % status
+	for i in range(0,10):
+		status = jsondata['data']['micros'][i]['status']
+		print "Status Messages : %s." % status
 
 def storetoken(access_token,access_token_secret):
 	global ACCESS_TOKEN_FILE
