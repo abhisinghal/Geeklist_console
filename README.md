@@ -41,4 +41,5 @@ Anyone can contribute to it. Simply fork the repository and send pull requests.
 ####Version 0.1 - 28th September 
 * Authenticates user to use "Geeklist Console" Application using geekli.st Oauth 1.0.		
 * Gets user details of authenticated user.			
-* Gets status messages of the authenticated user.		
+* Gets status messages of the authenticated user.								
+* Getls links & cards of the authenticate user.
