@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 '''
 Geeklist Console
 ================
@@ -5,9 +7,9 @@ Geeklist Console
 It is a console based client written in python to access content of https://geekli.st website. You can view micros, post micros etc in a geeky way now.
 
 AUTHOR
-Name : Bhavyanshu Parasher						
+Name : Bhavyanshu Parasher (https://geekli.st/bhavyanshu)						
 Email : bhavyanshu.spl@gmail.com	
-
+Geeklist handle : @bhavyanshu
 '''
 from rauth import OAuth1Service
 try: import simplejson as json
@@ -23,23 +25,21 @@ except NameError:
 
 
 #Initializing variables - These are the default entries for Geeklist Console App
+Geeklist = OAuth1Service(
+	    name='Geeklist',
+	    consumer_key=CONSUMER_KEY,
+	    consumer_secret=CONSUMER_SECRET,
+	    request_token_url='http://api.geekli.st/v1/oauth/request_token',
+	    access_token_url='http://api.geekli.st/v1/oauth/access_token',
+	    authorize_url='https://geekli.st/oauth/authorize',
+	    base_url='http://api.geekli.st/v1/')
+
 CONSUMER_KEY='B_9C1WM-hC-JcVTVOUwyOwXB0PA'
 CONSUMER_SECRET='RLEw2jBmlceHb02GobOnI-wtiyukg-in6lEgQIxMttI'
 ACCESS_TOKEN_FILE = '.gklst_access_token'
+
+
 INTRODUCTION = '''
-
-Welcome to https://geekli.st Command Line Application. 
-
-Options available: 
-
-help() - Display help message.
-auth(Geeklist) - Authenticate with Geekli.st. On startup, the application will automatically authenticate.
-logout() - Expire the access token.
-'''
-#Ending initializing variables 
-
-def help():
-    print '''
 **************************************************************************************************************
 *                                           Please use the following commands:
 *
@@ -50,17 +50,9 @@ def help():
 * getStatus() - Fetches the list of your statuses.
 **************************************************************************************************************
 '''
+#Ending initializing variables 
 
-Geeklist = OAuth1Service(
-	    name='Geeklist',
-	    consumer_key=CONSUMER_KEY,
-	    consumer_secret=CONSUMER_SECRET,
-	    request_token_url='http://api.geekli.st/v1/oauth/request_token',
-	    access_token_url='http://api.geekli.st/v1/oauth/access_token',
-	    authorize_url='https://geekli.st/oauth/authorize',
-	    base_url='http://api.geekli.st/v1/')
-
-
+#################################################Functions Begin#################################################
 def auth(Geeklist):
 	auth_required = True
 	if os.path.exists(ACCESS_TOKEN_FILE):
@@ -125,6 +117,12 @@ def storetoken(access_token,access_token_secret):
 	
 
 
+def logout():
+    if os.path.exists(ACCESS_TOKEN_FILE):
+        os.remove(ACCESS_TOKEN_FILE)
+	print 'Session cleared!'
+
+
 def shell():
     auth(Geeklist)
     try:
@@ -134,10 +132,20 @@ def shell():
         import code
         code.InteractiveConsole(globals()).interact(INTRODUCTION)
 
-def logout():
-    if os.path.exists(ACCESS_TOKEN_FILE):
-        os.remove(ACCESS_TOKEN_FILE)
-	print 'Logged out!'
+
+def help():
+    print '''
+**************************************************************************************************************
+*                                           Please use the following commands:
+*
+* help() - Display help message.
+* auth(Geeklist) - Authenticate with Geekli.st. 
+* logout() - Expire the access token in case of any authentication or bad request error.
+* userdetails() - Fetches your name and email address.
+* getStatus() - Fetches the list of your statuses.
+**************************************************************************************************************
+'''
+
 
 if __name__ == '__main__':
     shell() 
