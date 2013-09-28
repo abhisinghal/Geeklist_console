@@ -49,6 +49,7 @@ INTRODUCTION = '''
 * auth(Geeklist) - Authenticate with Geekli.st. 
 * logout() - Expire the access token in case of any authentication or bad request error.
 * userdetails() - Fetches your name and email address.
+* getcards() - Fetches profile information of another geek.
 * getStatus() - Fetches the list of your statuses.
 **************************************************************************************************************
 '''
@@ -88,29 +89,27 @@ def auth(Geeklist):
 		
 
 def userdetails():
-	access_token = ACCESS_TOKEN
-	access_token_secret = ACCESS_TOKEN_SECRET
-	session = Geeklist.get_session((access_token,access_token_secret))
-	print 'Session Created'
-	r = session.get('user',verify=True)
-	#print r  Returns response status | Used only to test.
-	jsondata = json.loads(r.text)
+	jsondata = getjson('user')
 	userfullname = jsondata['data']['name']
 	useremail = jsondata['data']['email']
 	print "You are logged in as %s & your email is %s." % (userfullname,useremail)
 
+def getcards():
+	jsondata = getjson('user/cards')
+	total_cards = jsondata['data']['total_cards']
+	print "Total number of cards till now : %s." %total_cards
+	for i in range(0,total_cards):
+		headline = jsondata['data']['cards'][i]['headline']
+		print "Title : %s." %headline
+
 def getStatus():
-	access_token = ACCESS_TOKEN
-	access_token_secret = ACCESS_TOKEN_SECRET
-	session = Geeklist.get_session((access_token,access_token_secret))
-	print 'Session Created'
-	r = session.get('user/micros',verify=True)
-	jsondata = json.loads(r.text)
+	jsondata = getjson('user/micros')
 	total_micros = jsondata['data']['total_micros']
 	print "Total number of micros till now : %s." %total_micros
 	for i in range(0,10):
 		status = jsondata['data']['micros'][i]['status']
 		print "Status Messages : %s." % status
+
 
 
 def logout():
@@ -127,7 +126,13 @@ def storetoken(access_token,access_token_secret):
 	open(ACCESS_TOKEN_FILE,'w').write(json.dumps(data))
 	print 'Access token stored'
 	
-
+def getjson(urlpath):
+	access_token = ACCESS_TOKEN
+	access_token_secret = ACCESS_TOKEN_SECRET
+	session = Geeklist.get_session((access_token,access_token_secret))
+	r = session.get(urlpath,verify=True)
+	jsontext = json.loads(r.text)
+	return jsontext
 
 
 def shell():
