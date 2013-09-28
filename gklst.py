@@ -49,7 +49,7 @@ INTRODUCTION = '''
 * auth(Geeklist) - Authenticate with Geekli.st. 
 * logout() - Expire the access token in case of any authentication or bad request error.
 * userdetails() - Fetches your name and email address.
-* getcards() - Fetches profile information of another geek.
+* getCards() - Fetches profile information of another geek.
 * getStatus() - Fetches the list of your statuses.
 **************************************************************************************************************
 '''
@@ -68,7 +68,7 @@ def auth(Geeklist):
 		ACCESS_TOKEN_SECRET = data['access_token_secret']
 		userdetails()
         	auth_required = False
-		print 'Authentication not required.'
+		print 'Authentication done.'
 
 
 	if auth_required: 
@@ -94,22 +94,49 @@ def userdetails():
 	useremail = jsondata['data']['email']
 	print "You are logged in as %s & your email is %s." % (userfullname,useremail)
 
-def getcards():
+def getCards():
 	jsondata = getjson('user/cards')
 	total_cards = jsondata['data']['total_cards']
 	print "Total number of cards till now : %s." %total_cards
-	for i in range(0,total_cards):
-		headline = jsondata['data']['cards'][i]['headline']
-		print "Title : %s." %headline
+	if(total_cards>9): #Need to find a work around as the response only generates 10 items at once in the jsondata. For now this is the solution.
+		total_cards=9 
+		for i in range(0,total_cards):  
+			headline = jsondata['data']['cards'][i]['headline']
+			print "Title : %s." %headline
+	else:
+		for i in range(0,total_cards):  
+			headline = jsondata['data']['cards'][i]['headline']
+			print "Title : %s." %headline
 
 def getStatus():
 	jsondata = getjson('user/micros')
 	total_micros = jsondata['data']['total_micros']
 	print "Total number of micros till now : %s." %total_micros
-	for i in range(0,10):
-		status = jsondata['data']['micros'][i]['status']
-		print "Status Messages : %s." % status
+	if(total_micros>9):
+		total_micros=9
+		for i in range(0,total_micros):
+			status = jsondata['data']['micros'][i]['status']
+			print "Status Messages : %s." % status
+	else:
+		for i in range(0,total_micros):
+			status = jsondata['data']['micros'][i]['status']
+			print "Status Messages : %s." % status
 
+def getLinks():
+	jsondata = getjson('user/links')
+	total_links = jsondata['data']['total_links']
+	print "Total number of links shared till now : %s." %total_links
+	if(total_links>9):           
+		total_links=9		
+		for i in range(0,total_links):
+			title = jsondata['data']['links'][i]['title']
+			url = jsondata['data']['links'][i]['url']
+			print "Title : %s. & URL : %s" % (title,url)
+	else:
+		for i in range(0,total_links):
+			title = jsondata['data']['links'][i]['title']
+			url = jsondata['data']['links'][i]['url']
+			print "Title : %s. & URL : %s" % (title,url)
 
 
 def logout():
